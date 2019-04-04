@@ -1,0 +1,68 @@
+
+url https://gist.github.com/lobster1234/af2dc4eef3ee75117043d950c2c1ec2b
+
+
+FROM ubuntu:l6.04
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install openjdk-8-jdk wget
+RUN mkdir /usr/local/tomcat
+RUN wget http://www-us.apache.org/dist/tomcat/tomcat-8/v8.5.16/bin/apache-tomcat-8.5.16.tar.gz -O /tmp/tomcat.tar.gz
+RUN cd /tmp && tar xvfz tomcat.tar.gz
+RUN cp -Rv /tmp/apache-tomcat-8.5.16/* /usr/local/tomcat/
+EXPOSE 8080
+CMD /usr/local/tomcat/bin/catalina.sh run
+
+-----------------
+
+updated with url of the tomcat for download
+
+FROM ubuntu:latest
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install openjdk-8-jdk wget
+RUN mkdir /usr/local/tomcat
+RUN wget https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.16/bin/apache-tomcat-8.5.16.tar.gz -O /tmp/tomcat.tar.gz
+RUN cd /tmp && tar xvfz tomcat.tar.gz
+RUN cp -Rv /tmp/apache-tomcat-8.5.16/* /usr/local/tomcat/
+EXPOSE 8080
+CMD /usr/local/tomcat/bin/catalina.sh run
+
+
+$ docker build .
+
+$ docker run -d -p 8080:8080 <image_id>
+
+$ curl http://localhost:8080
+
+vi index.html
+path in container /usr/local/tomcat/webapps/examples
+place html file here
+
+
+while running on gui user below https://2886795411-8080-cykoria04.environments.katacoda.com/examples/index.html
+<html>
+<body>
+<h1> Hello world</h1>
+</body>
+</html>
+
+
+--------------------------
+
+dynamic inventory
+
+https://medium.com/@iamrameshjonathan/create-aws-dynamic-inventory-using-ansible-8676e2f1e04
+
+nginx install and configure
+https://code-maven.com/install-and-configure-nginx-using-ansible
+
+filebeat
+https://www.claudiokuenzler.com/blog/726/install-configure-elastic-filebeat-through-with-ansible
+
+
+-------------------
+
+network diagram
+
+https://www.draw.io/
+
+alb autoscaling route 53 http://jayendrapatil.com/aws-elastic-load-balancing/
