@@ -1,0 +1,20 @@
+---
+- hosts: all
+  tasks:
+    - name: ensure nginx is at the latest version
+      yum: name=nginx state=latest update_cache=true
+      become: yes
+    - name: start nginx
+      service:
+          name: nginx
+          state: started
+      become: yes
+    - name: copy the content of the web site
+      copy:
+        src: /root/task_ansible/content/
+        dest: /usr/share/nginx/html
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+      become: yes
