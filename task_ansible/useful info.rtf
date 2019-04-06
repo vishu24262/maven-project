@@ -1,0 +1,478 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.16299}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9\par
+url {{\field{\*\fldinst{HYPERLINK https://gist.github.com/lobster1234/af2dc4eef3ee75117043d950c2c1ec2b }}{\fldrslt{https://gist.github.com/lobster1234/af2dc4eef3ee75117043d950c2c1ec2b\ul0\cf0}}}}\f0\fs22\par
+\par
+\par
+FROM ubuntu:l6.04\par
+RUN apt-get -y update && apt-get -y upgrade\par
+RUN apt-get -y install openjdk-8-jdk wget\par
+RUN mkdir /usr/local/tomcat\par
+RUN wget {{\field{\*\fldinst{HYPERLINK http://www-us.apache.org/dist/tomcat/tomcat-8/v8.5.16/bin/apache-tomcat-8.5.16.tar.gz }}{\fldrslt{http://www-us.apache.org/dist/tomcat/tomcat-8/v8.5.16/bin/apache-tomcat-8.5.16.tar.gz\ul0\cf0}}}}\f0\fs22  -O /tmp/tomcat.tar.gz\par
+RUN cd /tmp && tar xvfz tomcat.tar.gz\par
+RUN cp -Rv /tmp/apache-tomcat-8.5.16/* /usr/local/tomcat/\par
+EXPOSE 8080\par
+CMD /usr/local/tomcat/bin/catalina.sh run\par
+\par
+-----------------\par
+\par
+updated with url of the tomcat for download\par
+\par
+FROM ubuntu:16.04\par
+RUN apt-get -y update && apt-get -y upgrade\par
+RUN apt-get -y install openjdk-8-jdk wget\par
+RUN mkdir /usr/local/tomcat\par
+RUN wget {{\field{\*\fldinst{HYPERLINK https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.16/bin/apache-tomcat-8.5.16.tar.gz }}{\fldrslt{https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.16/bin/apache-tomcat-8.5.16.tar.gz\ul0\cf0}}}}\f0\fs22  -O /tmp/tomcat.tar.gz\par
+RUN cd /tmp && tar xvfz tomcat.tar.gz\par
+RUN cp -Rv /tmp/apache-tomcat-8.5.16/* /usr/local/tomcat/\par
+COPY hello.html /usr/local/tomcat/webapps/examples/\par
+EXPOSE 8080\par
+CMD /usr/local/tomcat/bin/catalina.sh run\par
+\par
+\par
+$ docker build .\par
+\par
+$ docker run -d -p 8080:8080 <image_id>\par
+\par
+$ curl {{\field{\*\fldinst{HYPERLINK http://localhost:8080 }}{\fldrslt{http://localhost:8080\ul0\cf0}}}}\f0\fs22\par
+\par
+vi index.html\par
+path in container /usr/local/tomcat/webapps/examples\par
+place html file here\par
+\par
+\par
+while running on gui user below {{\field{\*\fldinst{HYPERLINK https://2886795411-8080-cykoria04.environments.katacoda.com/examples/index.html }}{\fldrslt{https://2886795411-8080-cykoria04.environments.katacoda.com/examples/index.html\ul0\cf0}}}}\f0\fs22\par
+<html>\par
+<body>\par
+<h1> Hello world</h1>\par
+</body>\par
+</html>\par
+\par
+\par
+--------------------------\par
+\par
+dynamic inventory\par
+\par
+{{\field{\*\fldinst{HYPERLINK https://medium.com/@iamrameshjonathan/create-aws-dynamic-inventory-using-ansible-8676e2f1e04 }}{\fldrslt{https://medium.com/@iamrameshjonathan/create-aws-dynamic-inventory-using-ansible-8676e2f1e04\ul0\cf0}}}}\f0\fs22\par
+\par
+nginx install and configure\par
+{{\field{\*\fldinst{HYPERLINK https://code-maven.com/install-and-configure-nginx-using-ansible }}{\fldrslt{https://code-maven.com/install-and-configure-nginx-using-ansible\ul0\cf0}}}}\f0\fs22\par
+\par
+filebeat\par
+{{\field{\*\fldinst{HYPERLINK https://www.claudiokuenzler.com/blog/726/install-configure-elastic-filebeat-through-with-ansible }}{\fldrslt{https://www.claudiokuenzler.com/blog/726/install-configure-elastic-filebeat-through-with-ansible\ul0\cf0}}}}\f0\fs22\par
+\par
+\par
+-------------------\par
+\par
+network diagram\par
+\par
+{{\field{\*\fldinst{HYPERLINK https://www.draw.io/ }}{\fldrslt{https://www.draw.io/\ul0\cf0}}}}\f0\fs22\par
+\par
+alb autoscaling route 53 {{\field{\*\fldinst{HYPERLINK http://jayendrapatil.com/aws-elastic-load-balancing/ }}{\fldrslt{http://jayendrapatil.com/aws-elastic-load-balancing/\ul0\cf0}}}}\f0\fs22\par
+\par
+\par
+------------------\par
+\par
+docker compose installation\par
+\par
+curl -L "{{\field{\*\fldinst{HYPERLINK https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m) }}{\fldrslt{https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)\ul0\cf0}}}}\f0\fs22 " -o /usr/local/bin/docker-compose\par
+chmod +x /usr/local/bin/docker-compose\par
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\par
+docker-compose --version\par
+\par
+------------------------------------\par
+\par
+\par
+version: '3.1'\par
+services:\par
+  tomcat:\par
+    container_name: tomcat8\par
+    image: tomcat\par
+\tab ports:\par
+      - "8080:8080"\par
+\par
+  nginx:\par
+    container_name: nginx\par
+    image: nginx\par
+    links:\par
+      - "tomcat"\par
+    depends_on:\par
+      - tomcat\par
+    ports:\par
+      - "80:80"\par
+\par
+\par
+\par
+\par
+$ cat docker-compose.yaml\par
+version: '3.1'\par
+services:\par
+  tomcat:\par
+    build:\par
+\tab   context: .\par
+      dockerfile: Dockerfile\par
+    container_name: tomcat8\par
+    image: tomcat\par
+    ports:\par
+      - "8080:8080"\par
+\par
+  nginx:\par
+    container_name: nginx\par
+    image: nginx\par
+    links:\par
+      - "tomcat"\par
+\tab volumes:\par
+      - ./Conf:/etc/nginx/conf.d/\par
+    depends_on:\par
+      - tomcat\par
+    ports:\par
+      - "80:80"\par
+\tab   \par
+--------------------------\par
+new version   final one\par
+\par
+version: '3.1'\par
+services:\par
+  tomcat:\par
+    build:\par
+\tab   context: ./tomcat\par
+      dockerfile: Dockerfile\par
+    container_name: tomcat8\par
+    image: tomcat\par
+    ports:\par
+      - "8080:8080"\par
+\par
+  nginx:\par
+    build:\par
+\tab   context: ./nginx\par
+      dockerfile: Dockerfile\par
+    container_name: nginx\par
+    links:\par
+      - "tomcat"\par
+    depends_on:\par
+      - tomcat\par
+    ports:\par
+      - "80:80"\par
+---------------------------------\par
+\par
+proxyConf/default.conf file:\par
+/etc/nginx/conf.d\par
+\par
+default.conf file for nginx reverse-proxyConf/default\par
+\par
+server \{\par
+  listen 80;\par
+  server_name localhost;\par
+\par
+  location / \{\par
+    proxy_pass {{\field{\*\fldinst{HYPERLINK http://tomcat:8080 }}{\fldrslt{http://tomcat:8080\ul0\cf0}}}}\f0\fs22 ;\par
+  \}\par
+\}\par
+\par
+----------------\par
+nginx dockerfile\par
+\par
+$ cat Dockerfile\par
+FROM nginx\par
+COPY default.conf /etc/nginx/conf.d/\par
+$\par
+\par
+----------------------\par
+logs\par
+docker ps -a\par
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES\par
+cfc5a37adf52        tutorial_nginx      "nginx -g 'daemon of\'85"   14 minutes ago      Up 14 minutes       0.0.0.0:80->80/tcp       nginx\par
+df06a002998b        tomcat              "/bin/sh -c '/usr/lo\'85"   14 minutes ago      Up 14 minutes       0.0.0.0:8080->8080/tcp   tomcat8\par
+$ docker-compose ps\par
+ Name                Command               State           Ports\par
+-------------------------------------------------------------------------\par
+nginx     nginx -g daemon off;             Up      0.0.0.0:80->80/tcp\par
+tomcat8   /bin/sh -c /usr/local/tomc ...   Up      0.0.0.0:8080->8080/tcp\par
+tree\par
+.\par
+|-- docker-compose.yaml\par
+|-- nginx\par
+|   |-- Dockerfile\par
+|   `-- default.conf\par
+`-- tomcat\par
+    |-- Dockerfile\par
+    `-- hello.html\par
+\par
+2 directories, 5 files\par
+$\par
+\par
+---------------------------------\par
+page 2\par
+\par
+H */1 * * *\par
+\par
+\par
+\par
+val=`df -h | awk '0+$5 >= 70 \{print\}' | grep /var/jenkins_home | awk '\{print $5\}' | rev | cut -c 2- | rev`\par
+\par
+echo "printing the value of"$val\par
+if [ $val -gt 70 ];then\par
+\tab exit 1\par
+fi\par
+\par
+\par
+\par
+\par
+\par
+SMTP server name : smtp.gmail.com\par
+User name: user_email_id@gmail.com\par
+Password: 123456\par
+Use SSL : Checked\par
+SMTP Port: 456\par
+\par
+------------------------------------------------------------------------------\par
+\par
+page 3\par
+\par
+ansible installation\par
+\par
+$ sudo apt-get update\par
+$ sudo apt-get install software-properties-common\par
+$ sudo apt-add-repository --yes --update ppa:ansible/ansible\par
+$ sudo apt-get install ansible\par
+\par
+ansible --version\par
+\par
+pip installation\par
+sudo apt install python-pip\par
+pip --version\par
+\par
+su - root\par
+pip install boto\par
+\par
+----------------------------------\par
+\par
+---\par
+- hosts: all\par
+  tasks:\par
+    - name: ensure nginx is at the latest version\par
+      apt: name=nginx state=latest update_cache=true\par
+      become: yes\par
+    - name: start nginx\par
+      service:\par
+          name: nginx\par
+          state: started\par
+      become: yes\par
+    - name: copy the nginx config file and restart nginx\par
+      copy:\par
+        src: /home/foo/static_site.cfg\par
+        dest: /etc/nginx/sites-available/static_site.cfg\par
+      become: yes\par
+    - name: create symlink\par
+      file:\par
+        src: /etc/nginx/sites-available/static_site.cfg\par
+        dest: /etc/nginx/sites-enabled/default\par
+        state: link\par
+      become: yes\par
+    - name: copy the content of the web site\par
+      copy:\par
+        src: /home/foo/static-site-src/\par
+        dest: /home/foo/static-site\par
+    - name: restart nginx\par
+      service:\par
+        name: nginx\par
+        state: restarted\par
+      become: yes\par
+------------------------------------------------\par
+\par
+page 4\par
+\par
+---\par
+- hosts: all\par
+  tasks:\par
+    - name: ensure nginx is at the latest version\par
+      yum: name=nginx state=latest update_cache=true\par
+      become: yes\par
+    - name: start nginx\par
+      service:\par
+          name: nginx\par
+          state: started\par
+      become: yes\par
+    - name: copy the content of the web site\par
+      copy:\par
+        src: /root/ansible_task/content/\par
+        dest: /usr/share/nginx/html\par
+    - name: restart nginx\par
+      service:\par
+        name: nginx\par
+        state: restarted\par
+      become: yes\par
+\par
+\par
+---------------------------------------------\par
+\par
+filebeat\par
+{{\field{\*\fldinst{HYPERLINK https://github.com/geerlingguy/ansible-role-filebeat }}{\fldrslt{https://github.com/geerlingguy/ansible-role-filebeat\ul0\cf0}}}}\f0\fs22\par
+\par
+--------------------------------------------------------------------------------------------------------------------------\par
+\par
+page 5\par
+\par
+---\par
+- name: Add Elasticsearch GPG key.\par
+  rpm_key:\par
+    key: {{\field{\*\fldinst{HYPERLINK https://packages.elastic.co/GPG-KEY-elasticsearch }}{\fldrslt{https://packages.elastic.co/GPG-KEY-elasticsearch\ul0\cf0}}}}\f0\fs22\par
+    state: present\par
+- name: Add Filebeat repository.\par
+  template:\par
+    src: beats.repo.j2\par
+    dest: /etc/yum.repos.d/beats.repo\par
+    mode: 0644\tab\par
+-----------------------------------\par
+---\par
+- include: setup-RedHat.yml\par
+  when: ansible_os_family == 'RedHat'\par
+\par
+- include: setup-Debian.yml\par
+  when: ansible_os_family == 'Debian'\par
+\par
+- name: Install Filebeat.\par
+  package: name=filebeat state=present\par
+\par
+- include: config.yml\par
+  when: filebeat_create_config\par
+\par
+- name: Ensure Filebeat is started and enabled at boot.\par
+  service:\par
+    name: filebeat\par
+    state: started\par
+    enabled: true\par
+-------------------------------------\par
+[elastic-6.x]\par
+name=Elastic repository for 6.x packages\par
+baseurl=https://artifacts.elastic.co/packages/6.x/yum\par
+gpgcheck=1\par
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch\par
+enabled=1\par
+autorefresh=1\par
+type=rpm-md\par
+\par
+-------------------------------------------------------------------------------------------------------------------------\par
+\par
+page 6\par
+\par
+---\par
+- hosts: all\par
+  sudo: yes \par
+  tasks:\par
+    - name: Add Elasticsearch GPG key.\par
+      rpm_key:\par
+        key: {{\field{\*\fldinst{HYPERLINK https://packages.elastic.co/GPG-KEY-elasticsearch }}{\fldrslt{https://packages.elastic.co/GPG-KEY-elasticsearch\ul0\cf0}}}}\f0\fs22\par
+        state: present\par
+    - name: Add Filebeat repository.\par
+      template:\par
+        src: beats.repo.j2\par
+        dest: /etc/yum.repos.d/beats.repo\par
+        mode: 0644\tab  \par
+    - name: Install Filebeat.\par
+      package: name=filebeat state=present \par
+\tab\par
+    - name: FILEBEAT - Copy base filebeat config file \par
+      copy: src=/root/filebeat/filebeat.yml dest=/etc/filebeat/filebeat.yml\par
+\par
+    - name: FILEBEAT - Set shipper name \par
+      lineinfile: "dest=/etc/filebeat/filebeat.yml state=present regexp='^name:' line='name: \{\{ ansible_hostname \}\}' insertafter='# Shipper Name'" \par
+  \par
+    - name: FILEBEAT - Configure Logstash output \par
+      blockinfile: \par
+        dest: /etc/filebeat/filebeat.yml \par
+        insertafter: '# Logstash output' \par
+        marker: "# \{mark\} -- Logstash output configured by Ansible" \par
+        block: | \par
+          output.logstash: \par
+            hosts: ["logstashreceiver.example.com:5044"] \par
+\par
+\par
+    - name: FILEBEAT - Check if Nginx is installed \par
+      command: dpkg -l nginx \par
+      register: nginxinstalled \par
+\par
+    - name: FILEBEAT - Configure Nginx Logging \par
+      blockinfile: \par
+        dest: /etc/filebeat/filebeat.yml \par
+        insertafter: 'filebeat.prospectors:' \par
+        marker: "# \{mark\} -- Nginx logging configured by Ansible" \par
+        block: | \par
+          - input_type: log \par
+            paths: \par
+              - /var/log/nginx/*.log \par
+            document_type: nginx-access \par
+      when: nginxinstalled.rc == 0 \par
+\par
+    - name: FILEBEAT - Restart filebeat \par
+      service: name=filebeat state=restarted \par
+\par
+\par
+-------------------------------------------------------------------------------------------------------------\par
+\par
+page 7\par
+\par
+---\par
+- hosts: all\par
+  tasks:\par
+    - name: ensure nginx is at the latest version\par
+      yum: name=nginx state=latest update_cache=true\par
+      become: yes\par
+    - name: start nginx\par
+      service:\par
+          name: nginx\par
+          state: started\par
+      become: yes\par
+    - name: copy the content of the web site\par
+      copy:\par
+        src: /root/task_ansible/content/\par
+        dest: /usr/share/nginx/html\par
+    - name: restart nginx\par
+      service:\par
+        name: nginx\par
+        state: restarted\par
+      become: yes\par
+    - name: Add Elasticsearch GPG key.\par
+      rpm_key:\par
+        key: {{\field{\*\fldinst{HYPERLINK https://packages.elastic.co/GPG-KEY-elasticsearch }}{\fldrslt{https://packages.elastic.co/GPG-KEY-elasticsearch\ul0\cf0}}}}\f0\fs22\par
+        state: present\par
+    - name: Add Filebeat repository.\par
+      template:\par
+        src: beats.repo.j2\par
+        dest: /etc/yum.repos.d/beats.repo\par
+        mode: 0644\par
+    - name: Install Filebeat.\par
+      package: name=filebeat state=present\par
+    - name: FILEBEAT - Copy base filebeat config file\par
+      copy: src=/root/task_ansible/filebeat.yml dest=/etc/filebeat/filebeat.yml\par
+\par
+    - name: FILEBEAT - Set shipper name\par
+      lineinfile: "dest=/etc/filebeat/filebeat.yml state=present regexp='^name:' line='name: \{\{ ansible_hostname \}\}' insertafter='# Shipper Name'"\par
+\par
+    - name: FILEBEAT - Configure Logstash output\par
+      blockinfile:\par
+        dest: /etc/filebeat/filebeat.yml\par
+        insertafter: '# Logstash output'\par
+        marker: "# \{mark\} -- Logstash output configured by Ansible"\par
+        block: |\par
+          output.logstash:\par
+            hosts: ["logstashreceiver.example.com:5044"]\par
+    - name: FILEBEAT - Check if Nginx is installed\par
+      command: nginx -v\par
+      register: nginxinstalled\par
+    - name: FILEBEAT - Configure Nginx Logging\par
+      blockinfile:\par
+        dest: /etc/filebeat/filebeat.yml\par
+        insertafter: 'filebeat.prospectors:'\par
+        marker: "# \{mark\} -- Nginx logging configured by Ansible"\par
+        block: |\par
+          - input_type: log\par
+            paths:\par
+              - /var/log/nginx/*.log\par
+            document_type: nginx-access\par
+      when: nginxinstalled.rc == 0\par
+    - name: FILEBEAT - Restart filebeat\par
+      service: name=filebeat state=restarted\par
+}
+ 
